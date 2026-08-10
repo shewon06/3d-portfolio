@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Send, Mail, MapPin, Clock, Sparkles, CheckCircle2 } from 'lucide-react';
-import { LinkedinIcon } from './SocialIcons';
+import { Send, Mail, Phone, MapPin, Clock, CheckCircle2, MessageSquare } from 'lucide-react';
+import { LinkedinIcon, GithubIcon } from './SocialIcons';
 import confetti from 'canvas-confetti';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
 import { soundFx } from '../../utils/sound';
@@ -74,6 +74,8 @@ export default function Contact() {
               </h3>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                
+                {/* Email */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div style={{
                     width: '42px',
@@ -90,10 +92,36 @@ export default function Contact() {
                   </div>
                   <div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Direct Email</div>
-                    <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{contact?.email || 'shewonkaveesha@gmail.com'}</div>
+                    <a href={`mailto:${contact.email}`} style={{ fontWeight: 600, color: 'var(--text-main)', textDecoration: 'none' }}>
+                      {contact.email}
+                    </a>
                   </div>
                 </div>
 
+                {/* Phone / WhatsApp */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '10px',
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    border: '1px solid rgba(34, 197, 94, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#4ade80'
+                  }}>
+                    <Phone size={20} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Phone / WhatsApp</div>
+                    <a href={contact.whatsapp} target="_blank" rel="noreferrer" style={{ fontWeight: 600, color: '#4ade80', textDecoration: 'none' }}>
+                      {contact.phone} (0705505052)
+                    </a>
+                  </div>
+                </div>
+
+                {/* Location */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div style={{
                     width: '42px',
@@ -114,6 +142,7 @@ export default function Contact() {
                   </div>
                 </div>
 
+                {/* Response SLA */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <div style={{
                     width: '42px',
@@ -133,15 +162,46 @@ export default function Contact() {
                     <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>Guaranteed within 24 hours</div>
                   </div>
                 </div>
+
               </div>
             </div>
 
-            {/* Social Badges */}
+            {/* Social & WhatsApp Buttons */}
             <div className="glass-card" style={{ padding: '1.8rem' }}>
               <div style={{ fontSize: '0.85rem', fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', marginBottom: '1rem' }}>
-                // PROFESSIONAL SOCIAL MATRIX
+                // DIRECT CONNECT & MATRIX
               </div>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                {contact?.whatsapp && (
+                  <a
+                    href={contact.whatsapp}
+                    target="_blank"
+                    rel="noreferrer"
+                    onMouseEnter={() => soundFx.playHover()}
+                    onClick={() => soundFx.playClick()}
+                    style={{
+                      flex: 1,
+                      padding: '0.8rem 1.2rem',
+                      borderRadius: '10px',
+                      background: 'rgba(34, 197, 94, 0.12)',
+                      border: '1px solid rgba(34, 197, 94, 0.3)',
+                      color: '#4ade80',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.6rem',
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      transition: 'var(--transition-fast)'
+                    }}
+                  >
+                    <MessageSquare size={18} />
+                    <span>Chat on WhatsApp</span>
+                  </a>
+                )}
+
                 {contact?.linkedin && (
                   <a
                     href={contact.linkedin}

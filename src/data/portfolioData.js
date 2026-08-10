@@ -703,8 +703,9 @@ export const PORTFOLIO_DATA = {
   ========================================================= */
 
   contact: {
-    email: "shewonkaveesha@gmail.com",
-    phone: "+94 77 123 4567",
+    email: "shewon.ksh123@gmail.com",
+    phone: "+94 70 550 5052",
+    whatsapp: "https://wa.me/94705505052",
     linkedin:
       "https://www.linkedin.com/in/kaveesha-shewon-ab0869348/",
     github: "https://github.com/shewon06/3d-portfolio",
