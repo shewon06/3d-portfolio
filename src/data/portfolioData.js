@@ -707,7 +707,7 @@ export const PORTFOLIO_DATA = {
     phone: "+94 77 123 4567",
     linkedin:
       "https://www.linkedin.com/in/kaveesha-shewon-ab0869348/",
-    github: "https://github.com",
+    github: "https://github.com/shewon06/3d-portfolio",
     location: "Sri Lanka"
   }
 };
