@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Menu, X } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, Music } from 'lucide-react';
 import { soundFx } from '../../utils/sound';
 import { PORTFOLIO_DATA } from '../../data/portfolioData';
 
@@ -7,6 +7,7 @@ export default function Navbar({ activeSection }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [musicPlaying, setMusicPlaying] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,8 +140,37 @@ export default function Navbar({ activeSection }) {
         </nav>
 
         {/* Actions Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          {/* Audio Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          {/* Mission: Impossible Theme Music Button */}
+          <button
+            onClick={() => {
+              const isPlaying = soundFx.toggleMissionImpossibleTheme();
+              setMusicPlaying(isPlaying);
+            }}
+            onMouseEnter={() => soundFx.playHover()}
+            title={musicPlaying ? "Pause Mission: Impossible Theme" : "Play Mission: Impossible Theme"}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.35rem 0.8rem',
+              borderRadius: '20px',
+              background: musicPlaying ? 'rgba(239, 68, 68, 0.18)' : 'rgba(255, 255, 255, 0.05)',
+              border: `1px solid ${musicPlaying ? 'rgba(239, 68, 68, 0.5)' : 'rgba(255, 255, 255, 0.1)'}`,
+              color: musicPlaying ? '#f87171' : 'var(--text-muted)',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              fontFamily: 'var(--font-mono)',
+              fontWeight: 600,
+              transition: 'var(--transition-fast)',
+              boxShadow: musicPlaying ? '0 0 12px rgba(239, 68, 68, 0.4)' : 'none'
+            }}
+          >
+            <Music size={14} style={{ animation: musicPlaying ? 'pulse 1s infinite alternate' : 'none' }} />
+            <span>{musicPlaying ? "M:I THEME 🎶" : "PLAY M:I THEME"}</span>
+          </button>
+
+          {/* Audio FX Toggle */}
           <button
             onClick={handleAudioToggle}
             onMouseEnter={() => soundFx.playHover()}
