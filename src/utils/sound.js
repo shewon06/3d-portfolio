@@ -1,10 +1,11 @@
-// Web Audio API Sound Generator & Mission: Impossible Theme Synthesizer Engine
+// Web Audio API Sound Generator & Mission: Impossible Theme Background Music Engine
 
 class SoundEngine {
   constructor() {
     this.audioCtx = null;
     this.enabled = true;
     this.musicPlaying = false;
+    this.musicStarted = false;
     this.musicTimer = null;
     this.bgAudio = null;
   }
@@ -21,9 +22,30 @@ class SoundEngine {
     }
   }
 
+  // Auto-start background music on first user interaction anywhere on page
+  setupAutoPlay() {
+    if (typeof window === 'undefined') return;
+
+    const startAudio = () => {
+      if (!this.musicStarted) {
+        this.musicStarted = true;
+        this.playMissionImpossibleTheme();
+      }
+      window.removeEventListener('click', startAudio);
+      window.removeEventListener('keydown', startAudio);
+      window.removeEventListener('touchstart', startAudio);
+    };
+
+    window.addEventListener('click', startAudio);
+    window.addEventListener('keydown', startAudio);
+    window.addEventListener('touchstart', startAudio);
+  }
+
   toggleSound() {
     this.enabled = !this.enabled;
-    if (!this.enabled && this.musicPlaying) {
+    if (this.enabled) {
+      this.playMissionImpossibleTheme();
+    } else {
       this.stopMissionImpossibleTheme();
     }
     return this.enabled;
@@ -106,38 +128,29 @@ class SoundEngine {
   }
 
   /* =========================================================
-     MISSION: IMPOSSIBLE THEME SYNTHESIZER & MUSIC ENGINE
+     MISSION: IMPOSSIBLE THEME MUSIC ENGINE
   ========================================================= */
-
-  toggleMissionImpossibleTheme() {
-    if (this.musicPlaying) {
-      this.stopMissionImpossibleTheme();
-      return false;
-    } else {
-      this.playMissionImpossibleTheme();
-      return true;
-    }
-  }
 
   playMissionImpossibleTheme() {
     this.init();
-    if (!this.enabled) this.enabled = true;
+    if (!this.enabled) return;
     this.musicPlaying = true;
 
-    // Check if HTML audio element or MP3 is available
     if (typeof window !== 'undefined') {
       if (!this.bgAudio) {
         this.bgAudio = new Audio('/mission-impossible.mp3');
         this.bgAudio.loop = true;
-        this.bgAudio.volume = 0.35;
+        this.bgAudio.volume = 0.4;
       }
       
       const playPromise = this.bgAudio.play();
       if (playPromise !== undefined) {
         playPromise
-          .then(() => {})
+          .then(() => {
+            // Audio file playing cleanly!
+          })
           .catch(() => {
-            // Fallback to Web Audio API synthesized Mission: Impossible theme!
+            // Fallback to Web Audio API Synthesized Mission: Impossible Theme!
             this.startSynthesizedMissionImpossible();
           });
       }
@@ -148,7 +161,6 @@ class SoundEngine {
     this.musicPlaying = false;
     if (this.bgAudio) {
       this.bgAudio.pause();
-      this.bgAudio.currentTime = 0;
     }
     if (this.musicTimer) {
       clearTimeout(this.musicTimer);
@@ -159,10 +171,10 @@ class SoundEngine {
   startSynthesizedMissionImpossible() {
     if (!this.musicPlaying || !this.audioCtx) return;
 
-    const stepDuration = 0.11; // 16th note speed
+    const stepDuration = 0.125; // 16th note step duration (tempo ~150 bpm)
     let currentStep = 0;
 
-    // 5/4 Mission Impossible Ostinato & Melody Sequence
+    // 5/4 Mission Impossible Ostinato (G minor)
     const bassline = [
       { note: 196.00, dur: 3 }, // G3
       { note: 196.00, dur: 3 }, // G3
@@ -182,7 +194,7 @@ class SoundEngine {
     ];
 
     const playLoop = () => {
-      if (!this.musicPlaying) return;
+      if (!this.musicPlaying || !this.enabled) return;
       const now = this.audioCtx.currentTime;
       let timeOffset = 0;
 
@@ -194,7 +206,7 @@ class SoundEngine {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(note, now + timeOffset);
 
-        gain.gain.setValueAtTime(0.04, now + timeOffset);
+        gain.gain.setValueAtTime(0.035, now + timeOffset);
         gain.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + dur * stepDuration - 0.02);
 
         osc.connect(gain);
@@ -214,7 +226,7 @@ class SoundEngine {
         osc.type = 'square';
         osc.frequency.setValueAtTime(note, now + start * stepDuration);
 
-        gain.gain.setValueAtTime(0.03, now + start * stepDuration);
+        gain.gain.setValueAtTime(0.025, now + start * stepDuration);
         gain.gain.exponentialRampToValueAtTime(0.001, now + (start + dur) * stepDuration - 0.03);
 
         osc.connect(gain);
